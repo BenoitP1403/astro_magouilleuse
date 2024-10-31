@@ -91,8 +91,7 @@
             // Regex pour des lettres majuscules uniquement
             const uppercaseRegex = /^[A-Z]+$/;
             // Liste des signes astrologiques
-            const signesAstrologiques = ["BELIER", "BÉLIER", "TAUREAU", "GEMEAUX", "GÉMEAUX","GÉMEAU","GÉMEAU","POISSONS",  "CANCER", "LION", "VIERGE", "BALANCE", "SCORPION", "SAGITTAIRE", "CAPRICORNE", "VERSEAU", "POISSON"];
-
+            const signesAstrologiques = ["BELIER", "BÉLIER", "TAUREAU", "GEMEAUX", "GÉMEAUX","GÉMEAU","GEMEAU","POISSONS",  "CANCER", "LION", "VIERGE", "BALANCE", "SCORPION", "SAGITTAIRE", "CAPRICORNE", "VERSEAU", "POISSON"];
             // Validation de la date de naissance
             if (!dateRegex.test(dateBirth)) {
                 alert("Veuillez entrer une date de naissance valide au format JJ/MM/AAAA.");
@@ -100,7 +99,7 @@
             }
 
             // Validation du signe astrologique en majuscules et existence dans la liste
-            if (!uppercaseRegex.test(signe) || !signesAstrologiques.includes(signe)) {
+            if (!signesAstrologiques.includes(signe)) {
                 alert("Veuillez entrer un signe astrologique valide");
                 return;
             }
