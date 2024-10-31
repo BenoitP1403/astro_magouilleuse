@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro Magouilleuse</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        min-height: 100vh;
+    }
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+    }
+    h1 {
+        color: #4a90e2;
+        text-align: center;
+    }
+    label {
+        margin-top: 10px;
+        display: block;
+    }
+    input, button {
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+    button {
+        background-color: #4a90e2;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    button:hover {
+        background-color: #357abd;
+    }
+    .result {
+        margin-top: 20px;
+        color: #4a4a4a;
+    }
+    .result-item {
+        margin: 5px 0;
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Astro Magouilleuse</h1>
+        <form id="astroForm">
+            <label for="dateBirth">Date de naissance (JJ/MM/AAAA)</label>
+            <input type="text" id="dateBirth" placeholder="Entrez votre date de naissance" required>
+
+            <label for="signe">Signe astrologique</label>
+            <input type="text" id="signe" placeholder="Entrez votre signe en MAJUSCULE" required>
+
+            <label for="trigramme">Trigramme</label>
+            <input type="text" id="trigramme" placeholder="Entrez votre trigramme en MAJUSCULE" required>
+
+            <button type="button" onclick="generateChoices()">Calculer mes voeux</button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function generateChoices() {
+            const dateBirth = document.getElementById('dateBirth').value;
+            const signe = document.getElementById('signe').value;
+            const trigramme = document.getElementById('trigramme').value;
+
+            if (!dateBirth || !signe || !trigramme) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            const listeVoeux = ["raid", "natation", "escalade", "rugby", "volley-ball", "tennis", "équitation", "badminton", "aviron", "boxe", "handball", "basket-ball", "escrime", "judo", "multisport", "football", "cross-training"];
+            listeVoeux.sort();
+
+            // Générez une "seed" basée sur les entrées de l'utilisateur
+            let seed = dateBirth + signe + trigramme;
+            let seedValue = 0;
+            for (let i = 0; i < seed.length; i++) {
+                seedValue += seed.charCodeAt(i);
+            }
+
+            // Fonction pour randomiser la liste en fonction de la seed
+            function seededShuffle(array, seed) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    seed = (seed * 9301 + 49297) % 233280;
+                    const j = Math.floor((seed / 233280) * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            const shuffledVoeux = seededShuffle([...listeVoeux], seedValue);
+
+            // Affichage des résultats
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "<h3>Voici la liste de vos voeux optimale calculée par l'astrologie. Il ne vous reste plus qu'à la recopier dans la magouilleuse!</h3>";
+            shuffledVoeux.forEach((voeu, index) => {
+                const voeuElement = document.createElement('div');
+                voeuElement.className = 'result-item';
+                voeuElement.textContent = `${index + 1} : ${voeu}`;
+                resultDiv.appendChild(voeuElement);
+            });
+        }
+    </script>
+</body>
+</html>
