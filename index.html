@@ -5,61 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astro Magouilleuse</title>
     <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f0f8ff;
-        color: #333;
-        display: flex;
-        justify-content: center;
-        padding: 20px;
-        min-height: 100vh;
-    }
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        width: 100%;
-    }
-    h1 {
-        color: #4a90e2;
-        text-align: center;
-    }
-    label {
-        margin-top: 10px;
-        display: block;
-    }
-    input, button {
-        width: 100%;
-        padding: 8px;
-        margin: 8px 0;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-    }
-    button {
-        background-color: #4a90e2;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    button:hover {
-        background-color: #357abd;
-    }
-    .result {
-        margin-top: 20px;
-        color: #4a4a4a;
-    }
-    .result-item {
-        margin: 5px 0;
-    }
-</style>
-
+        /* Styles CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #4a90e2;
+            text-align: center;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #4a90e2;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #357abd;
+        }
+        .result {
+            margin-top: 20px;
+            color: #4a4a4a;
+        }
+        .result-item {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -69,32 +69,56 @@
             <input type="text" id="dateBirth" placeholder="Entrez votre date de naissance" required>
 
             <label for="signe">Signe astrologique</label>
-            <input type="text" id="signe" placeholder="Entrez votre signe en MAJUSCULE" required>
+            <input type="text" id="signe" placeholder="Entrez votre signe sans accent" required>
 
             <label for="trigramme">Trigramme</label>
-            <input type="text" id="trigramme" placeholder="Entrez votre trigramme en MAJUSCULE" required>
+            <input type="text" id="trigramme" placeholder="Entrez votre trigramme sans accent" required>
 
-            <button type="button" onclick="generateChoices()">Calculer mes voeux</button>
+            <button type="button" onclick="validateAndGenerate()">Calculer mes voeux</button>
         </form>
 
         <div class="result" id="result"></div>
     </div>
 
     <script>
-        function generateChoices() {
+        function validateAndGenerate() {
             const dateBirth = document.getElementById('dateBirth').value;
-            const signe = document.getElementById('signe').value;
-            const trigramme = document.getElementById('trigramme').value;
+            const signe = document.getElementById('signe').value.toUpperCase() ;
+            const trigramme = document.getElementById('trigramme').value.toUpperCase() ;
 
-            if (!dateBirth || !signe || !trigramme) {
-                alert("Veuillez remplir tous les champs.");
+            // Regex pour le format JJ/MM/AAAA
+            const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+            // Regex pour des lettres majuscules uniquement
+            const uppercaseRegex = /^[A-Z]+$/;
+            // Liste des signes astrologiques
+            const signesAstrologiques = ["BELIER", "TAUREAU", "GEMEAUX", "CANCER", "LION", "VIERGE", "BALANCE", "SCORPION", "SAGITTAIRE", "CAPRICORNE", "VERSEAU", "POISSON"];
+
+            // Validation de la date de naissance
+            if (!dateRegex.test(dateBirth)) {
+                alert("Veuillez entrer une date de naissance valide au format JJ/MM/AAAA.");
                 return;
             }
 
+            // Validation du signe astrologique en majuscules et existence dans la liste
+            if (!uppercaseRegex.test(signe) || !signesAstrologiques.includes(signe)) {
+                alert("Veuillez entrer un signe astrologique valide");
+                return;
+            }
+
+            // Validation du trigramme limité à 3 ou 4 lettres
+            if (!uppercaseRegex.test(trigramme) || (trigramme.length < 3 || trigramme.length > 4)) {
+                alert("Veuillez entrer un trigramme de 3 ou 4 lettres en MAJUSCULES uniquement.");
+                return;
+            }
+
+            generateChoices(dateBirth, signe, trigramme);
+        }
+
+        function generateChoices(dateBirth, signe, trigramme) {
             const listeVoeux = ["raid", "natation", "escalade", "rugby", "volley-ball", "tennis", "équitation", "badminton", "aviron", "boxe", "handball", "basket-ball", "escrime", "judo", "multisport", "football", "cross-training"];
             listeVoeux.sort();
 
-            // Générez une "seed" basée sur les entrées de l'utilisateur
+            // Générer une seed basée sur les entrées de l'utilisateur
             let seed = dateBirth + signe + trigramme;
             let seedValue = 0;
             for (let i = 0; i < seed.length; i++) {
@@ -115,7 +139,7 @@
 
             // Affichage des résultats
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = "<h3>Voici la liste de vos voeux optimale calculée par l'astrologie. Il ne vous reste plus qu'à la recopier dans la magouilleuse!</h3>";
+            resultDiv.innerHTML = "<h3>Voici la liste de vos voeux optimale calculée par l'astrologie :</h3>";
             shuffledVoeux.forEach((voeu, index) => {
                 const voeuElement = document.createElement('div');
                 voeuElement.className = 'result-item';
