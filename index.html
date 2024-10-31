@@ -69,10 +69,10 @@
             <input type="text" id="dateBirth" placeholder="Entrez votre date de naissance" required>
 
             <label for="signe">Signe astrologique</label>
-            <input type="text" id="signe" placeholder="Entrez votre signe sans accent" required>
+            <input type="text" id="signe" placeholder="Entrez votre signe astrologique valide" required>
 
             <label for="trigramme">Trigramme</label>
-            <input type="text" id="trigramme" placeholder="Entrez votre trigramme sans accent" required>
+            <input type="text" id="trigramme" placeholder="Entrez votre trigramme" required>
 
             <button type="button" onclick="validateAndGenerate()">Calculer mes voeux</button>
         </form>
@@ -91,7 +91,7 @@
             // Regex pour des lettres majuscules uniquement
             const uppercaseRegex = /^[A-Z]+$/;
             // Liste des signes astrologiques
-            const signesAstrologiques = ["BELIER", "TAUREAU", "GEMEAUX", "CANCER", "LION", "VIERGE", "BALANCE", "SCORPION", "SAGITTAIRE", "CAPRICORNE", "VERSEAU", "POISSON"];
+            const signesAstrologiques = ["BELIER", "BÉLIER", "TAUREAU", "GEMEAUX", "GÉMEAUX","GÉMEAU","GÉMEAU","POISSONS",  "CANCER", "LION", "VIERGE", "BALANCE", "SCORPION", "SAGITTAIRE", "CAPRICORNE", "VERSEAU", "POISSON"];
 
             // Validation de la date de naissance
             if (!dateRegex.test(dateBirth)) {
@@ -106,8 +106,8 @@
             }
 
             // Validation du trigramme limité à 3 ou 4 lettres
-            if (!uppercaseRegex.test(trigramme) || (trigramme.length < 3 || trigramme.length > 4)) {
-                alert("Veuillez entrer un trigramme de 3 ou 4 lettres en MAJUSCULES uniquement.");
+            if (trigramme.length < 3 || trigramme.length > 4){
+                alert("Veuillez entrer un trigramme de 3 ou 4 lettres.");
                 return;
             }
 
